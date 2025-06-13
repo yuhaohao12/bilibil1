@@ -51,7 +51,7 @@ jobs:
 
       - name: Prepare artifacts
         shell: pwsh
-        run: |  # 修复区域开始（统一缩进10空格）
+        run: |
           mkdir release
           Copy-Item -Path "dist\B站直播助手.exe" -Destination "release\"
           Copy-Item -Path "config.json" -Destination "release\"
@@ -66,7 +66,7 @@ jobs:
             "",
             "注意：程序需要直播姬窗口保持可见状态"
           )
-          $lines | Set-Content -Path "release\README.txt" -Encoding UTF8  # 修复区域结束
+          $lines | Set-Content -Path "release\README.txt" -Encoding UTF8
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

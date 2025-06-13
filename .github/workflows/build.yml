@@ -3,7 +3,8 @@ name: Build Bilibili Auto Stream
 on:
   push:
     tags:
-      - 'v*.*.*'  # 当你 push tag 例如 v1.0.0 时才触发
+      - 'v*.*.*'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -56,17 +57,17 @@ jobs:
           Copy-Item -Path "config.json" -Destination "release\"
           Copy-Item -Path "images\*" -Destination "release\images\" -Recurse -Force
 
-          $readme = @"
-使用说明：
-
-1. 将所有文件放在同一目录下
-2. 首次运行会自动创建配置文件
-3. 右键系统托盘图标打开配置界面
-4. 设置开播/关播时间和关播方式
-
-注意：程序需要直播姬窗口保持可见状态
-"@
-          $readme | Out-File -FilePath "release\README.txt" -Encoding utf8
+          $lines = @(
+            "使用说明：",
+            "",
+            "1. 将所有文件放在同一目录下",
+            "2. 首次运行会自动创建配置文件",
+            "3. 右键系统托盘图标打开配置界面",
+            "4. 设置开播/关播时间和关播方式",
+            "",
+            "注意：程序需要直播姬窗口保持可见状态"
+          )
+          $lines | Set-Content -Path "release\README.txt" -Encoding UTF8
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

@@ -56,8 +56,7 @@ jobs:
           Copy-Item -Path "dist\B站直播助手.exe" -Destination "release\"
           Copy-Item -Path "config.json" -Destination "release\"
           Copy-Item -Path "images\*" -Destination "release\images\" -Recurse -Force
-
-          $readmeLines = @(
+          $lines = @(
             "使用说明：",
             "",
             "1. 将所有文件放在同一目录下",
@@ -67,7 +66,7 @@ jobs:
             "",
             "注意：程序需要直播姬窗口保持可见状态"
           )
-          $readmeLines | Set-Content -Path "release\README.txt" -Encoding UTF8
+          $lines | Set-Content -Path "release\README.txt" -Encoding UTF8
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -75,4 +74,3 @@ jobs:
           name: B站直播助手_v${{ github.ref_name }}
           path: release/
           retention-days: 7
-

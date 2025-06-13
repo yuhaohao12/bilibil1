@@ -50,9 +50,11 @@ jobs:
             --clean `
             main.py
 
-      - name: Prepare artifacts
-        shell: pwsh
-        run: |
+     - name: Install dependencies
+  run: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+
           mkdir release
           Copy-Item -Path "dist\B站直播助手.exe" -Destination "release\" -Force
           Copy-Item -Path "config.json" -Destination "release\" -Force

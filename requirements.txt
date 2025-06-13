@@ -6,3 +6,4 @@ pystray==0.19.4
 pillow==10.1.0
 pywin32==306
 opencv-python-headless==4.8.1.78
+keyboard==0.13.5

@@ -74,3 +74,4 @@ jobs:
           name: B站直播助手_v${{ github.ref_name }}
           path: release/
           retention-days: 7
+

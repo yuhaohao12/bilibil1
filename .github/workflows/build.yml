@@ -1,0 +1,77 @@
+name: Build Bilibili Auto Stream
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # 当你 push tag 例如 v1.0.0 时才触发
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller==6.1.0
+          pip install pyautogui==0.9.54
+          pip install schedule==1.2.0
+          pip install pynput==1.7.6
+          pip install pystray==0.19.4
+          pip install pillow==10.1.0
+          pip install pywin32==306
+          pip install opencv-python-headless==4.8.1.78
+
+      - name: Build executable
+        shell: pwsh
+        run: |
+          mkdir build
+          Copy-Item -Path "images\*" -Destination "build\images\" -Recurse -Force
+          pyinstaller `
+            --onefile `
+            --noconsole `
+            --add-data "images;images" `
+            --icon "images/icon.ico" `
+            --name "B站直播助手" `
+            --distpath "dist" `
+            --workpath "build" `
+            --specpath "build" `
+            --clean `
+            main.py
+
+      - name: Prepare artifacts
+        shell: pwsh
+        run: |
+          mkdir release
+          Copy-Item -Path "dist\B站直播助手.exe" -Destination "release\"
+          Copy-Item -Path "config.json" -Destination "release\"
+          Copy-Item -Path "images\*" -Destination "release\images\" -Recurse -Force
+
+          $readme = @"
+使用说明：
+
+1. 将所有文件放在同一目录下
+2. 首次运行会自动创建配置文件
+3. 右键系统托盘图标打开配置界面
+4. 设置开播/关播时间和关播方式
+
+注意：程序需要直播姬窗口保持可见状态
+"@
+          $readme | Out-File -FilePath "release\README.txt" -Encoding utf8
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: B站直播助手_v${{ github.ref_name }}
+          path: release/
+          retention-days: 7
+

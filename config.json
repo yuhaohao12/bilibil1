@@ -1,0 +1,13 @@
+{
+    "start_time": "19:00",
+    "end_time": "22:00",
+    "stop_method": "image",
+    "stop_button_image": "stop_button.png",
+    "stop_coordinates": [100, 200],
+    "close_coordinates": [300, 400],
+    "confidence": 0.85,
+    "retry_times": 3,
+    "window_title": "直播姬",
+    "hotkey": "ctrl+f9",
+    "minimize_to_tray": true
+}

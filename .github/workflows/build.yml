@@ -36,6 +36,7 @@ jobs:
         shell: pwsh
         run: |
           mkdir build
+          mkdir build\images   # ✅ 修复关键：确保目标目录存在
           Copy-Item -Path "images\*" -Destination "build\images\" -Recurse -Force
           pyinstaller `
             --onefile `
@@ -53,8 +54,9 @@ jobs:
         shell: pwsh
         run: |
           mkdir release
-          Copy-Item -Path "dist\B站直播助手.exe" -Destination "release\"
-          Copy-Item -Path "config.json" -Destination "release\"
+          Copy-Item -Path "dist\B站直播助手.exe" -Destination "release\" -Force
+          Copy-Item -Path "config.json" -Destination "release\" -Force
+          mkdir release\images
           Copy-Item -Path "images\*" -Destination "release\images\" -Recurse -Force
           $lines = @(
             "使用说明：",
@@ -68,11 +70,11 @@ jobs:
           )
           $lines | Set-Content -Path "release\README.txt" -Encoding UTF8
 
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: B站直播助手_v${{ github.ref_name }}
           path: release/
           retention-days: 7
+
 
